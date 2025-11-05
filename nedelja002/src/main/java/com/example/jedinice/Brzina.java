@@ -23,11 +23,11 @@ public class Brzina {
         return this.mps * 3.6;
     }
 
-    public void addMetersPerSecond(double mps){
-        this.mps += mps;
+    public void add(Brzina brzina){
+        this.mps += brzina.toMetersPerSecond();
     }
 
-    public void addKilometersPerHour(double kmph){
-        this.mps += kmph / 3.6;
+    public Duzina predjeniPut(Vreme vreme){
+        return Duzina.fromMeters(this.mps * vreme.toSeconds());
     }
 }

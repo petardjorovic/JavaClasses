@@ -1,18 +1,18 @@
 package com.example.jedinice;
 
-public class Put {
+public class Duzina {
     private double metri;
 
-    private Put(double metri){
+    private Duzina(double metri){
         this.metri = metri;
     }
 
-    public static Put fromMeters(double metri){
-        return new Put(metri);
+    public static Duzina fromMeters(double metri){
+        return new Duzina(metri);
     }
 
-    public static Put fromKilometers(double kilometri){
-        return new Put(kilometri * 1000.);
+    public static Duzina fromKilometers(double kilometri){
+        return new Duzina(kilometri * 1000.);
     }
 
     public double toMeters(){
@@ -21,6 +21,10 @@ public class Put {
 
     public double toKilometers(){
         return this.metri / 1000.;
+    }
+
+    public void add(Duzina duzina){
+        this.metri += duzina.toMeters();
     }
 
     public void addMeters(double metara){
