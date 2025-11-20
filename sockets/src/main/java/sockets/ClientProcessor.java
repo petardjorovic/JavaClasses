@@ -26,22 +26,24 @@ public class ClientProcessor implements Runnable {
     }
 
     private void proccess(PrintWriter out, Scanner in) throws IOException {
-        out.println("Welcome!");
+        // out.println("Welcome!");
+        out.println("OK");
         out.flush();
 
         while (true) {
             String command = getCommand(out, in);
 
             if(command.equals("EXIT")){
-                out.println("Good bye!");
-                out.flush();
+                // out.println("Good bye!");
+                // out.flush();
                 client.close();
                 break;
             }
 
             if(command.equals("AVERAGE")){
                 double average = server.getDatabase().getAverageTemperature();
-                out.println("Average temperature is " + average);
+                // out.println("Average temperature is " + average);
+                out.println(average);
                 out.flush();
                 continue;
             }
@@ -53,15 +55,16 @@ public class ClientProcessor implements Runnable {
                 long timestamp = commandScanner.nextLong();
                 double value = commandScanner.nextDouble();
                 server.getDatabase().add(new TemperatureMeasurement(timestamp, value));
-                out.println("Added " + timestamp + " = " + value);
+                // out.println("Added " + timestamp + " = " + value);
+                out.println("OK");
                 out.flush();
                 // commandScanner.close();
                 continue;
             }
 
-            out.println("Unknown command...");
+            // out.println("Unknown command...");
+            out.println("-");
             out.flush();
-
         }
     }
 
@@ -69,8 +72,8 @@ public class ClientProcessor implements Runnable {
         String command = "";
 
         while(command.equals("")){
-            out.print("? ");
-            out.flush();
+            // out.print("? ");
+            // out.flush();
             
             try {
                 command = in.nextLine().trim().toUpperCase();

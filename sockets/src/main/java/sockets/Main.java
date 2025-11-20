@@ -8,7 +8,8 @@ public class Main {
             TemperatureMeasurementBatabase database = new TemperatureMeasurementBatabase();
             Server server = new Server(database);
         } catch (IOException e) {
-            e.printStackTrace();
+            // e.printStackTrace();
+            System.out.println("server greska");
         }
     }
 }
