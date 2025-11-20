@@ -1,4 +1,4 @@
-package sockets;
+package sockets.data;
 
 public class TemperatureMeasurement {
     private final long timestamp;

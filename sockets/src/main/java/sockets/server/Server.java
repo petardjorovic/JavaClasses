@@ -1,8 +1,10 @@
-package sockets;
+package sockets.server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import sockets.data.TemperatureMeasurementBatabase;
 
 public class Server {
     private final TemperatureMeasurementBatabase database;

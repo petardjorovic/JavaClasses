@@ -2,14 +2,15 @@ package sockets;
 
 import java.io.IOException;
 
+import sockets.data.TemperatureMeasurementBatabase;
+import sockets.server.Server;
+
 public class Main {
     public static void main(String[] args) {
         try {
-            TemperatureMeasurementBatabase database = new TemperatureMeasurementBatabase();
-            Server server = new Server(database);
+            Server server = new Server(new TemperatureMeasurementBatabase());
         } catch (IOException e) {
-            // e.printStackTrace();
-            System.out.println("server greska");
+            e.printStackTrace();
         }
     }
 }

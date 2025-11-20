@@ -1,17 +1,30 @@
-package sockets;
+package sockets.server;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
+
+import sockets.commands.AverageCommand;
+import sockets.commands.Command;
+import sockets.commands.ExitCommand;
+import sockets.commands.InsertCommand;
+import sockets.commands.NoCommand;
 
 public class ClientProcessor implements Runnable {
     private final Server server;
     private final Socket client;
+    private Map<String, Class> commandMap = new HashMap<>();
 
     public ClientProcessor(Server server, Socket client) {
         this.server = server;
         this.client = client;
+
+        this.commandMap.put("EXIT", ExitCommand.class);
+        this.commandMap.put("AVERAGE", AverageCommand.class);
+        this.commandMap.put("INSERT", InsertCommand.class);
     }
 
     @Override
@@ -33,39 +46,27 @@ public class ClientProcessor implements Runnable {
         while (true) {
             String command = getCommand(out, in);
 
-            if(command.equals("EXIT")){
-                // out.println("Good bye!");
-                // out.flush();
-                client.close();
-                break;
-            }
+            Class klasa = getClassFromCommand(command);
 
-            if(command.equals("AVERAGE")){
-                double average = server.getDatabase().getAverageTemperature();
-                // out.println("Average temperature is " + average);
-                out.println(average);
-                out.flush();
-                continue;
+            try {
+                Command cmd = (Command) klasa.getDeclaredConstructor(new Class[] {Server.class, Socket.class})
+                                             .newInstance(new Object[] {server, client});
+                cmd.execute(command);
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
             }
-
-            // INSERT TIMESTAMPS VALUES
-            if(command.startsWith("INSERT ")){
-                Scanner commandScanner = new Scanner(command);
-                commandScanner.next(); // skip INSERT
-                long timestamp = commandScanner.nextLong();
-                double value = commandScanner.nextDouble();
-                server.getDatabase().add(new TemperatureMeasurement(timestamp, value));
-                // out.println("Added " + timestamp + " = " + value);
-                out.println("OK");
-                out.flush();
-                // commandScanner.close();
-                continue;
-            }
-
-            // out.println("Unknown command...");
-            out.println("-");
-            out.flush();
         }
+    }
+
+    private Class getClassFromCommand(String command) {
+        Scanner scanner = new Scanner(command);
+        String commandName = scanner.next().trim().toUpperCase();
+
+        if(commandMap.containsKey(commandName)){
+            return commandMap.get(commandName);
+        }
+
+        return NoCommand.class;
     }
 
     private String getCommand(PrintWriter out, Scanner in){

@@ -1,6 +1,5 @@
 package client_example;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
@@ -35,7 +34,7 @@ public class Main {
             out.println("EXIT");
             out.flush();
         } catch (Exception e) {
-            System.out.println("odavde je greska");
+           e.printStackTrace();
         }
     }
 }
